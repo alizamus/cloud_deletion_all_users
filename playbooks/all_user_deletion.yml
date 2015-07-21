@@ -4,40 +4,48 @@
   vars_files:
     - config_vars.yml
   tasks:
-    - name: install git
-      apt: name=git
-    - name: Clonning the repository
-      git: >
-        repo=https://github.com/alizamus/cloud_deletion.git
+    #- name: install git
+    #  apt: name=git
+    #- name: Clonning the repository
+    #  git: >
+    #    repo=https://github.com/alizamus/cloud_deletion.git
+    #    dest=/root/cloud_deletion
+    #    force=yes
+    - name: copying the files
+      copy: >
+        src=/root/cloud_deletion_all_users/cloud_deletion
         dest=/root/cloud_deletion
-        force=yes
+        owner=root
+        group=root
+        mode="u+rwx"
+        directory_mode=0755
     - name: Assign admin user to the projects
-      command: /root/cloud_deletion/assign_admin.py --admin_pass={{ admin_pass }}
+      command: /root/cloud_deletion/cloud_deletion/assign_admin.py --admin_pass={{ admin_pass }}
     - name: Delete the service instances
-      command: /root/cloud_deletion/delete-service-instances.py --admin_pass={{ admin_pass }}
+      command: /root/cloud_deletion/cloud_deletion/delete-service-instances.py --admin_pass={{ admin_pass }}
     - pause: seconds=20
     - name: Delete the VMs
-      command: /root/cloud_deletion/delete-vm.py --admin_pass={{ admin_pass }}
+      command: /root/cloud_deletion/cloud_deletion/delete-vm.py --admin_pass={{ admin_pass }}
     - pause: seconds=20
     - name: Delete the floating ips
-      command: /root/cloud_deletion/delete-floating-ip.py --admin_pass={{ admin_pass }}
+      command: /root/cloud_deletion/cloud_deletion/delete-floating-ip.py --admin_pass={{ admin_pass }}
     - pause: seconds=20
     - name: Delete the floating ip pools
-      command: /root/cloud_deletion/delete-floating-ip-pool.py --admin_pass={{ admin_pass }}
+      command: /root/cloud_deletion/cloud_deletion/delete-floating-ip-pool.py --admin_pass={{ admin_pass }}
     - pause: seconds=20
     - name: Delete the ports
-      command: /root/cloud_deletion/delete-port.py --admin_pass={{ admin_pass }}
+      command: /root/cloud_deletion/cloud_deletion/delete-port.py --admin_pass={{ admin_pass }}
     - pause: seconds=20
     - name: Delete the networks
-      command: /root/cloud_deletion/delete-network.py --admin_pass={{ admin_pass }}
+      command: /root/cloud_deletion/cloud_deletion/delete-network.py --admin_pass={{ admin_pass }}
     - pause: seconds=20
     - name: Delete the policy
-      command: /root/cloud_deletion/delete-policy.py --admin_pass={{ admin_pass }} 
+      command: /root/cloud_deletion/cloud_deletion/delete-policy.py --admin_pass={{ admin_pass }} 
     - pause: seconds=20
     - name: Delete the users
-      command: /root/cloud_deletion/delete-user.py --admin_pass={{ admin_pass }}
+      command: /root/cloud_deletion/cloud_deletion/delete-user.py --admin_pass={{ admin_pass }}
     - pause: seconds=20
     - name: Delete the tenants
-      command: /root/cloud_deletion/delete-tenants.py --admin_pass={{ admin_pass }}
+      command: /root/cloud_deletion/cloud_deletion/delete-tenants.py --admin_pass={{ admin_pass }}
     - name: Removing the additional directories
       command: rm -rf /root/cloud_deletion
